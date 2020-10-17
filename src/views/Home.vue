@@ -171,7 +171,7 @@ export default {
   position: absolute;
   left: 5px;
   line-height: 10px;
-  padding: 1px 3px;
+  padding: 2px 3px;
 }
 
 .card-title {

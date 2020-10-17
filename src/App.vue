@@ -9,6 +9,15 @@
 </template>
 
 <style>
+body {
+  font-family: sans-serif;
+}
+
+button {
+  border: 1px solid #ddd;
+  padding: 5px 10px;
+}
+
 .container {
   margin: 0 auto;
   width: 1000px;

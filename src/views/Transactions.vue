@@ -2,8 +2,14 @@
   <div class="container">
     <h2>Transactions</h2>
 
-    <button @click="init" class="r-margin">Start</button>
-    <button @click="closeConnection" class="r-margin">Stop</button>
+    <button
+      @click="init"
+      class="r-margin"
+    >Start</button>
+    <button
+      @click="closeConnection"
+      class="r-margin"
+    >Stop</button>
     <button @click="resetMessages">Reset</button>
 
     <table>
@@ -71,12 +77,10 @@ export default {
     },
 
     openConnection(sendInitMessage, messages) {
-      console.log("Starting connection to WebSocket Server");
       this.connection = new WebSocket("wss://ws.blockchain.info/inv");
 
       this.connection.onopen = function (event) {
         console.log(event);
-        console.log("Successfully connected");
         sendInitMessage();
       }
 
@@ -95,13 +99,15 @@ export default {
     },
 
     closeConnection() {
-      this.connection.close();
+      this.connection && this.connection.close();
     },
 
     resetMessages() {
-      this.closeConnection();
-      this.messages = [];
-      this.openConnection(this.sendInitMessage, this.messages);
+      if (this.connection) {
+        this.closeConnection();
+        this.messages = [];
+        this.openConnection(this.sendInitMessage, this.messages);
+      }
     }
   }
 }
