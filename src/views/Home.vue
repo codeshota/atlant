@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h2>Drag and Resize</h2>
 
     <button @click="returnLastCard">Return last card</button>
@@ -15,6 +15,8 @@
         :z="card.z"
         :w="card.width"
         :h="card.height"
+        :min-width="30"
+        :min-height="30"
         :parent="true"
         @dragging="onDrag"
         @resizing="onResize"
@@ -28,7 +30,7 @@
             class="card-disable-button"
             @click="disableCard(index)"
           >x</button>
-          <p class="card-title">Title {{ index + 1 }}</p>
+          <p class="card-title">Title {{ card.id }}</p>
         </div>
       </vue-draggable-resizable>
     </div>
@@ -43,6 +45,7 @@ export default {
     return {
       cards: [
         {
+          id: 1,
           width: 300,
           height: 100,
           x: 10,
@@ -51,6 +54,7 @@ export default {
           disabled: false
         },
         {
+          id: 2,
           width: 300,
           height: 100,
           x: 150,
@@ -59,6 +63,7 @@ export default {
           disabled: false
         },
         {
+          id: 3,
           width: 300,
           height: 100,
           x: 650,
@@ -67,6 +72,7 @@ export default {
           disabled: false
         },
         {
+          id: 4,
           width: 300,
           height: 100,
           x: 250,
