@@ -2,35 +2,42 @@
   <div>
     <h2>Drag and Resize</h2>
 
-    <div style="height: 1000px; width: 1000px; border: 1px solid red; position: relative;">
+    <button @click="returnLastCard">Return last card</button>
+
+    <div class="table">
       <vue-draggable-resizable
         v-for="(card, index) in cards"
         :key="index"
-        :grid="[10,10]"
-        :w="card.width"
-        :h="card.height"
+        v-show="!card.disabled"
+        :grid="[10, 10]"
         :x="card.x"
         :y="card.y"
-        @dragging="onDrag(index)"
-        @resizing="onResize(index)"
+        :z="card.z"
+        :w="card.width"
+        :h="card.height"
         :parent="true"
+        @dragging="onDrag"
+        @resizing="onResize"
+        @activated="onActivated(index)"
+        @dragstop="saveCardsState"
+        @resizestop="saveCardsState"
+        class="card"
       >
-        <p>title {{ index + 1 }}</p>
+        <div class="card-header">
+          <button
+            class="card-disable-button"
+            @click="disableCard(index)"
+          >x</button>
+          <p class="card-title">Title {{ index + 1 }}</p>
+        </div>
       </vue-draggable-resizable>
     </div>
   </div>
 </template>
 
 <script>
-import VueDraggableResizable from 'vue-draggable-resizable'
-import 'vue-draggable-resizable/dist/VueDraggableResizable.css'
-
 export default {
   name: 'Home',
-
-  components: {
-    VueDraggableResizable
-  },
 
   data: function () {
     return {
@@ -39,38 +46,130 @@ export default {
           width: 300,
           height: 100,
           x: 10,
-          y: 10
+          y: 20,
+          z: 'auto',
+          disabled: false
         },
         {
           width: 300,
           height: 100,
-          x: 400,
-          y: 30
+          x: 150,
+          y: 300,
+          z: 'auto',
+          disabled: false
         },
         {
           width: 300,
           height: 100,
-          x: 200,
-          y: 150
+          x: 650,
+          y: 200,
+          z: 'auto',
+          disabled: false
         },
         {
           width: 300,
           height: 100,
-          x: 600,
-          y: 200
-        },
-      ]
+          x: 250,
+          y: 100,
+          z: 'auto',
+          disabled: false
+        }
+      ],
+
+      currentCardIndex: null,
+
+      disabledCardsOrder: []
+    }
+  },
+
+  mounted() {
+    if (localStorage.storedCards) {
+      this.cards = JSON.parse(localStorage.getItem('storedCards'));
+    }
+
+    if (localStorage.storedDisabledCardsOrder) {
+      this.disabledCardsOrder = JSON.parse(localStorage.getItem('storedDisabledCardsOrder'));
     }
   },
 
   methods: {
-    onResize: function (index) {
-      console.log(index)
+    onResize: function (x, y, width, height) {
+      this.cards[this.currentCardIndex].x = x;
+      this.cards[this.currentCardIndex].y = y;
+      this.cards[this.currentCardIndex].width = width;
+      this.cards[this.currentCardIndex].height = height;
     },
 
-    onDrag: function (index) {
-      console.log(index)
+    onDrag: function (x, y) {
+      this.cards[this.currentCardIndex].x = x;
+      this.cards[this.currentCardIndex].y = y;
+    },
+
+    onActivated(index) {
+      this.currentCardIndex = index;
+      this.cards.forEach(card => card.z = 'auto')
+      this.cards[index].z = 1
+    },
+
+    disableCard(index) {
+      this.cards[index].disabled = true;
+      localStorage.setItem('storedCards', JSON.stringify(this.cards));
+      this.disabledCardsOrder.push(index);
+      localStorage.setItem('storedDisabledCardsOrder', JSON.stringify(this.disabledCardsOrder));
+    },
+
+    saveCardsState() {
+      localStorage.setItem('storedCards', JSON.stringify(this.cards));
+    },
+
+    returnLastCard() {
+      if (this.disabledCardsOrder.length > 0) {
+        const lastCardIndex = this.disabledCardsOrder[this.disabledCardsOrder.length - 1];
+
+        this.cards.forEach(card => card.z = 'auto');
+
+        this.cards[lastCardIndex].width = 300;
+        this.cards[lastCardIndex].height = 100;
+        this.cards[lastCardIndex].x = 350;
+        this.cards[lastCardIndex].y = 200;
+        this.cards[lastCardIndex].z = 1;
+        this.cards[lastCardIndex].disabled = false;
+
+        this.disabledCardsOrder.splice(-1, 1);
+      }
     }
   }
 }
 </script>
+
+<style scoped>
+.table {
+  margin-top: 10px;
+  height: 500px;
+  width: 1000px;
+  border: 1px solid #ddd;
+  position: relative;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+}
+
+.card-header {
+  position: relative;
+  border-bottom: 1px solid #ddd;
+}
+
+.card-disable-button {
+  position: absolute;
+  left: 5px;
+  line-height: 10px;
+  padding: 1px 3px;
+}
+
+.card-title {
+  margin: 5px;
+  text-align: center;
+}
+</style>
