@@ -39,9 +39,9 @@
 
 <script>
 export default {
-  name: 'Home',
+  name: 'Table',
 
-  data: function () {
+  data() {
     return {
       cards: [
         {
