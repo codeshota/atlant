@@ -14,7 +14,8 @@ body {
 }
 
 #app {
-  padding: 10px;
+  margin: 10px auto;
+  width: 1200px;
 }
 
 button {
