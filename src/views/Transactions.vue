@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <h2>Transactions</h2>
 
     <button
@@ -15,8 +15,8 @@
     <table>
       <thead>
         <tr>
-          <th class="fixed-width">From</th>
-          <th class="fixed-width">To</th>
+          <th>From</th>
+          <th>To</th>
           <th>Sum</th>
         </tr>
       </thead>
@@ -27,30 +27,25 @@
           :key="i"
         >
           <td>
-            <p
+            <span
               v-for="(input, i) in message.x.inputs"
               :key="i"
             >
               {{ input.prev_out.addr}}
-            </p>
+            </span>
           </td>
 
           <td>
-            <p
+            <span
               v-for="(out, i) in message.x.out"
               :key="i"
             >
               {{ out.addr}}
-            </p>
+            </span>
           </td>
 
           <td>
-            <p
-              v-for="(out, i) in message.x.out"
-              :key="i"
-            >
-              {{ out.value / 100000000 }}
-            </p>
+            {{ calcValuesSum(message.x.out) }}
           </td>
         </tr>
       </tbody>
@@ -108,6 +103,14 @@ export default {
         this.messages = [];
         this.openConnection(this.sendInitMessage, this.messages);
       }
+    },
+
+    calcValuesSum(out) {
+      let sum = 0;
+      for (let i = 0; i < out.length; i++) {
+        sum += out[i].value;
+      }
+      return sum / 100000000;
     }
   }
 }
@@ -123,12 +126,9 @@ table {
 table,
 th,
 td {
-  border: 1px solid #eee;
+  border: 1px solid #ddd;
   padding: 10px;
-}
-
-.fixed-width {
-  width: 420px;
+  width: 1200px;
 }
 
 .r-margin {

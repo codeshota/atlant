@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div>
     <h2>Drag and Resize</h2>
 
     <button @click="returnLastCard">Return last card</button>
@@ -21,8 +21,6 @@
         @dragging="onDrag"
         @resizing="onResize"
         @activated="onActivated(index)"
-        @dragstop="saveCardsState"
-        @resizestop="saveCardsState"
         class="card"
       >
         <div class="card-header">
@@ -48,7 +46,7 @@ export default {
           id: 1,
           width: 300,
           height: 100,
-          x: 10,
+          x: 70,
           y: 20,
           z: 'auto',
           disabled: false
@@ -57,8 +55,8 @@ export default {
           id: 2,
           width: 300,
           height: 100,
-          x: 150,
-          y: 300,
+          x: 450,
+          y: 320,
           z: 'auto',
           disabled: false
         },
@@ -66,8 +64,8 @@ export default {
           id: 3,
           width: 300,
           height: 100,
-          x: 650,
-          y: 200,
+          x: 690,
+          y: 230,
           z: 'auto',
           disabled: false
         },
@@ -75,7 +73,7 @@ export default {
           id: 4,
           width: 300,
           height: 100,
-          x: 250,
+          x: 750,
           y: 100,
           z: 'auto',
           disabled: false
@@ -126,17 +124,13 @@ export default {
 
     onActivated(index) {
       this.currentCardIndex = index;
-      this.cards.forEach(card => card.z = 'auto')
-      this.cards[index].z = 1
+      this.cards.forEach(card => card.z = 'auto');
+      this.cards[index].z = 1;
     },
 
     disableCard(index) {
       this.cards[index].disabled = true;
       this.disabledCardsOrder.push(index);
-    },
-
-    saveCardsState() {
-      
     },
 
     returnLastCard() {
@@ -145,8 +139,8 @@ export default {
         this.cards.forEach(card => card.z = 'auto');
         this.cards[lastCardIndex].width = 300;
         this.cards[lastCardIndex].height = 100;
-        this.cards[lastCardIndex].x = 350;
-        this.cards[lastCardIndex].y = 200;
+        this.cards[lastCardIndex].x = 450;
+        this.cards[lastCardIndex].y = 300;
         this.cards[lastCardIndex].z = 1;
         this.cards[lastCardIndex].disabled = false;
         this.disabledCardsOrder.splice(-1, 1);
@@ -159,8 +153,8 @@ export default {
 <style scoped>
 .table {
   margin-top: 10px;
-  height: 500px;
-  width: 1000px;
+  height: 800px;
+  width: 1200px;
   border: 1px solid #ddd;
   position: relative;
 }
@@ -173,7 +167,6 @@ export default {
 .card-header {
   position: relative;
   border-bottom: 1px solid #ddd;
-  cursor: move;
 }
 
 .card-disable-button {
