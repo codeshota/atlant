@@ -88,6 +88,19 @@ export default {
     }
   },
 
+  watch: {
+    disabledCardsOrder() {
+      localStorage.setItem('storedDisabledCardsOrder', JSON.stringify(this.disabledCardsOrder));
+    },
+
+    cards: {
+      deep: true,
+      handler() {
+        localStorage.setItem('storedCards', JSON.stringify(this.cards));
+      }
+    }
+  },
+
   mounted() {
     if (localStorage.storedCards) {
       this.cards = JSON.parse(localStorage.getItem('storedCards'));
@@ -119,28 +132,23 @@ export default {
 
     disableCard(index) {
       this.cards[index].disabled = true;
-      localStorage.setItem('storedCards', JSON.stringify(this.cards));
       this.disabledCardsOrder.push(index);
-      localStorage.setItem('storedDisabledCardsOrder', JSON.stringify(this.disabledCardsOrder));
     },
 
     saveCardsState() {
-      localStorage.setItem('storedCards', JSON.stringify(this.cards));
+      
     },
 
     returnLastCard() {
       if (this.disabledCardsOrder.length > 0) {
         const lastCardIndex = this.disabledCardsOrder[this.disabledCardsOrder.length - 1];
-
         this.cards.forEach(card => card.z = 'auto');
-
         this.cards[lastCardIndex].width = 300;
         this.cards[lastCardIndex].height = 100;
         this.cards[lastCardIndex].x = 350;
         this.cards[lastCardIndex].y = 200;
         this.cards[lastCardIndex].z = 1;
         this.cards[lastCardIndex].disabled = false;
-
         this.disabledCardsOrder.splice(-1, 1);
       }
     }
@@ -165,13 +173,14 @@ export default {
 .card-header {
   position: relative;
   border-bottom: 1px solid #ddd;
+  cursor: move;
 }
 
 .card-disable-button {
   position: absolute;
   left: 5px;
   line-height: 10px;
-  padding: 2px 3px;
+  padding: 1px 3px;
 }
 
 .card-title {

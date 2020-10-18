@@ -14,8 +14,7 @@ body {
 }
 
 button {
-  border: 1px solid #ddd;
-  padding: 5px 10px;
+  cursor: pointer;
 }
 
 .container {
