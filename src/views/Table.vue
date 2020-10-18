@@ -77,6 +77,15 @@ export default {
           y: 100,
           z: 'auto',
           disabled: false
+        },
+        {
+          id: 5,
+          width: 300,
+          height: 100,
+          x: 250,
+          y: 190,
+          z: 'auto',
+          disabled: false
         }
       ],
 
