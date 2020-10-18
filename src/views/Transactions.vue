@@ -72,25 +72,24 @@ export default {
     },
 
     openConnection(sendInitMessage, messages) {
-      this.connection = new WebSocket("wss://ws.blockchain.info/inv");
+      this.connection = new WebSocket('wss://ws.blockchain.info/inv');
 
-      this.connection.onopen = function (event) {
-        console.log(event);
+      this.connection.onopen = function () {
+        console.log('Connected');
         sendInitMessage();
       }
 
       this.connection.onmessage = function (event) {
-        console.log(JSON.parse(event.data));
         messages.push(JSON.parse(event.data));
       }
 
-      this.connection.onclose = function (event) {
-        console.log(event);
+      this.connection.onclose = function () {
+        console.log('Disconnected');
       }
     },
 
     sendInitMessage() {
-      this.connection.send(JSON.stringify({ "op": "unconfirmed_sub" }));
+      this.connection.send(JSON.stringify({ 'op': 'unconfirmed_sub' }));
     },
 
     closeConnection() {
